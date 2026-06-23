@@ -107,9 +107,11 @@ boxes.forEach((box) => {
       box.style.color = "blue";
       turnO = false;
     } else {
-      box.innerText = "X";
+      // box.innerText = "X";
+      randomMove()
       box.style.color = "red";
       turnO = true;
+      box.disabled = true;
     }
     box.disabled = true;
     winner();
@@ -178,9 +180,16 @@ function winner() {
   
   
   function randomMove(){
-    let random = (Math.random()*8).toFixed(0);
-    boxes[random].innerText = "X";
+    let emptyBoxes = boxes.some(box => box.innerText === "")
+
+    if(!emptyBoxes)return;
+
+    while(true){
+      let random = Math.floor(Math.random() * boxes.length);
+      if (boxes[random].innerText === ""){
+        boxes[random].innerText = "X"
+        break;
+      }
+    }
   }
   
-  randomMove()
-
