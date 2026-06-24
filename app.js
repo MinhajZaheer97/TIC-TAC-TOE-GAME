@@ -75,7 +75,7 @@
 //       drawSound.play();
 //     }
 //   }
-  
+
 //   resetBtn.addEventListener("click", () => {
 //     boxes.forEach((box) => {
 //       box.innerText = "";
@@ -84,13 +84,12 @@
 //     turnO = true;
 //     winnerText.innerHTML = "";
 //     ok.play();
-//   });
-
-
+// //   });
 
 const boxes = [...document.querySelectorAll(".box")];
 const resetBtn = document.querySelector(".reset");
 const winnerText = document.querySelector(".winner");
+const aiBtn = document.querySelector(".AI");
 
 const drawSound = new Audio("./draw.wav");
 const clickSound = new Audio("./click.wav");
@@ -106,90 +105,101 @@ boxes.forEach((box) => {
       box.innerText = "O";
       box.style.color = "blue";
       turnO = false;
-    } else {
-      // box.innerText = "X";
-      randomMove()
-      box.style.color = "red";
-      turnO = true;
       box.disabled = true;
     }
-    box.disabled = true;
     winner();
   });
 });
+
+aiBtn.addEventListener("click", () => {
+      randomMove();
+      if (winnerText.innerText === "") {
+        winner();
+      }
+    });
 
 function winner() {
   const winPoss = [
     boxes[0].innerHTML === boxes[1].innerHTML &&
       boxes[1].innerHTML === boxes[2].innerHTML &&
       boxes[0].innerHTML !== "",
-      boxes[3].innerHTML === boxes[4].innerHTML &&
+    boxes[3].innerHTML === boxes[4].innerHTML &&
       boxes[4].innerHTML === boxes[5].innerHTML &&
       boxes[3].innerHTML !== "",
-      boxes[6].innerHTML === boxes[7].innerHTML &&
+    boxes[6].innerHTML === boxes[7].innerHTML &&
       boxes[7].innerHTML === boxes[8].innerHTML &&
       boxes[6].innerHTML !== "",
-      boxes[0].innerHTML === boxes[3].innerHTML &&
+    boxes[0].innerHTML === boxes[3].innerHTML &&
       boxes[3].innerHTML === boxes[6].innerHTML &&
       boxes[0].innerHTML !== "",
-      boxes[1].innerHTML === boxes[4].innerHTML &&
+    boxes[1].innerHTML === boxes[4].innerHTML &&
       boxes[4].innerHTML === boxes[7].innerHTML &&
       boxes[1].innerHTML !== "",
-      boxes[2].innerHTML === boxes[5].innerHTML &&
+    boxes[2].innerHTML === boxes[5].innerHTML &&
       boxes[5].innerHTML === boxes[8].innerHTML &&
       boxes[2].innerHTML !== "",
-      boxes[0].innerHTML === boxes[4].innerHTML &&
+    boxes[0].innerHTML === boxes[4].innerHTML &&
       boxes[4].innerHTML === boxes[8].innerHTML &&
       boxes[0].innerHTML !== "",
-      boxes[2].innerHTML === boxes[4].innerHTML &&
+    boxes[2].innerHTML === boxes[4].innerHTML &&
       boxes[4].innerHTML === boxes[6].innerHTML &&
       boxes[2].innerHTML !== "",
-    ];
-    if (
-      winPoss[0] ||
-      winPoss[1] ||
-      winPoss[2] ||
-      winPoss[3] ||
-      winPoss[4] ||
-      winPoss[5] ||
-      winPoss[6] ||
-      winPoss[7]
-    ) {
-      winnerText.innerText = turnO ? "Winner is X" : "Winner is O";
-      winnerText.classList.add("win");
-      winSound.play();
-      boxes.forEach((box) => {
-        box.disabled = true;
-      });
-    } else if (boxes.every((box) => box.innerHTML !== "")) {
-      winnerText.classList.add("win");
-      winnerText.innerText = "It's a tie!";
-      drawSound.play();
-    }
-  }
-  
-  resetBtn.addEventListener("click", () => {
+  ];
+  if (
+    winPoss[0] ||
+    winPoss[1] ||
+    winPoss[2] ||
+    winPoss[3] ||
+    winPoss[4] ||
+    winPoss[5] ||
+    winPoss[6] ||
+    winPoss[7]
+  ) {
+    winnerText.innerText = turnO ? "Winner is X" : "Winner is O";
+    winnerText.classList.add("win");
+    winSound.play();
     boxes.forEach((box) => {
-      box.innerText = "";
-      box.disabled = false;
+      box.disabled = true;
     });
-    turnO = true;
-    winnerText.innerHTML = "";
-    ok.play();
+    aiBtn.disabled = true;
+  } else if (boxes.every((box) => box.innerHTML !== "")) {
+    winnerText.classList.add("win");
+    winnerText.innerText = "It's a tie!";
+    drawSound.play();
+  }
+}
+
+resetBtn.addEventListener("click", () => {
+  boxes.forEach((box) => {
+    box.innerText = "";
+    box.disabled = false;
   });
-  
-  
-  function randomMove(){
-    let emptyBoxes = boxes.some(box => box.innerText === "")
+  turnO = true;
+  winnerText.innerHTML = "";
+  aiBtn.disabled = false;
+  ok.play();
+});
 
-    if(!emptyBoxes)return;
+function randomMove() {
+  if (!turnO) {
+    let emptyBoxes = boxes.some((box) => box.innerText === "");
 
-    while(true){
+    if (!emptyBoxes) return;
+
+    while (true) {
       let random = Math.floor(Math.random() * boxes.length);
-      if (boxes[random].innerText === ""){
-        boxes[random].innerText = "X"
+      if (boxes[random].innerText === "") {
+        boxes[random].innerText = "X";
+        boxes[random].style.color = "red";
+        boxes[random].disabled = true;
+        turnO = true;
         break;
       }
     }
   }
-  
+}
+
+
+
+
+
